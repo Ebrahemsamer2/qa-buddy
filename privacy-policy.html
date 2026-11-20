@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QA Buddy Privacy Policy</title>
+<style>
+  :root { --paper:#f6f8f7; --surface:#fff; --ink:#16302b; --muted:#5b6e69; --line:#d5dedb; --marker:#f4c542; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root { --paper:#13201d; --surface:#1a2a26; --ink:#e6eeeb; --muted:#93a6a0; --line:#2a3b37; color-scheme: dark; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.65 "Segoe UI Variable Text", "SF Pro Text", system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 22px 72px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; }
+  .meta { color: var(--muted); margin: 0 0 32px; }
+  h2 { font-size: 19px; margin: 34px 0 10px; padding-bottom: 4px; border-bottom: 3px solid var(--marker); display: inline-block; }
+  ul { padding-left: 22px; }
+  li { margin: 4px 0; }
+  .box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>QA Buddy Privacy Policy</h1>
+  <p class="meta">Last updated: November 17, 2026 · Published by Ebrahim Samir</p>
+
+  <p class="box"><strong>In short:</strong> QA Buddy captures technical information about bugs on the websites you choose. That information stays in your browser. It leaves your browser only when you decide to send a report to your own Jira site, download a file, or copy the report. QA Buddy has no servers of its own and does not sell, share or analyze your data.</p>
+
+  <h2>What QA Buddy captures</h2>
+  <p>On the sites you allow in Settings (all sites by default), QA Buddy captures, in your browser:</p>
+  <ul>
+    <li><strong>Errors</strong>: console error messages, uncaught errors and failed promises, with file names, line numbers and stack traces.</li>
+    <li><strong>Request problems</strong>: requests that fail, are cancelled or are slow, including the address, method, status, duration and parts of the request and response.</li>
+    <li><strong>Steps</strong>: the page you opened and the actions you take (for example "Clicked Save" or "Typed in Email"). For typing, only the field's name is recorded, <strong>never what you type</strong>.</li>
+    <li><strong>Session replay</strong>: a recording of page changes from roughly the last 30 seconds in the visible tab. Everything typed into fields is masked.</li>
+    <li><strong>Screenshot</strong>: taken when you open QA Buddy.</li>
+    <li><strong>Environment</strong>: page address and title, browser and version, operating system, screen and window size, language and time zone.</li>
+  </ul>
+  <p>Values that look like secrets (passwords, tokens, API keys, session IDs, cookies, card numbers) are replaced with <code>***</code> in addresses, request and response bodies, and console messages.</p>
+
+  <h2>Where the data is kept</h2>
+  <ul>
+    <li>Captured data is kept in your browser's session storage for the current tab only, limited to recent events, and is deleted when the tab is closed or reloaded, when you click "Start fresh", or after you send a report to Jira.</li>
+    <li>The session replay is kept only in the page's memory and is discarded when the page is closed.</li>
+    <li>Your settings, including your Jira site, email and API token, are stored in your browser's extension storage on your computer.</li>
+  </ul>
+
+  <h2>When data leaves your browser</h2>
+  <p>Only when you choose to:</p>
+  <ul>
+    <li><strong>Sending to Jira</strong>: when you click "Create Jira issue" or "Add to issue" and confirm on the review screen, the report you reviewed (and the attachments you chose) is sent directly from your browser to the Jira site you entered in Settings, using your own Jira account. Your API token is sent only to that Jira site.</li>
+    <li><strong>Downloading or copying</strong>: reports and replays you download are saved on your computer; copied text goes to your clipboard.</li>
+  </ul>
+  <p>You can remove events, steps, attachments, and request or response bodies on the review screen before anything is sent, and you can blur parts of the screenshot.</p>
+
+  <h2>What QA Buddy does not do</h2>
+  <ul>
+    <li>It does not send data to the developer of QA Buddy or to any third party other than the Jira site you configure.</li>
+    <li>It does not sell data, use it for advertising, or use it to determine creditworthiness or for lending.</li>
+    <li>It does not use analytics or tracking, and it does not load or run remote code.</li>
+  </ul>
+
+  <h2>Your control</h2>
+  <ul>
+    <li>Choose which sites QA Buddy runs on in Settings → Sites to capture. On other sites, it runs no code.</li>
+    <li>Turn off session replay in Settings → Capture.</li>
+    <li>Uninstalling QA Buddy deletes its stored settings and captured data from your browser.</li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="mailto:ebrahemsamer2@gmail.com">ebrahemsamer2@gmail.com</a></p>
+</main>
+</body>
+</html>
