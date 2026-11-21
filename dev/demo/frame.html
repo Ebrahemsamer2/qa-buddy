@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Agenda widget (embedded)</title>
+  <style>
+    body { font: 14px/1.5 system-ui, sans-serif; margin: 0; padding: 16px; color: #1f2a37; }
+    button { padding: 9px 12px; font: inherit; font-weight: 600; background: #2b59c3; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+    #agenda-result { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <strong>Agenda widget</strong> <span style="color:#5b6573">(this part runs inside an iframe)</span>
+  <p><button type="button" id="load">Load agenda</button></p>
+  <div id="agenda-result" role="status"></div>
+  <script>
+    // Intentional bug: the agenda API is too slow, so the XHR times out after 4 s
+    document.getElementById("load").addEventListener("click", () => {
+      const out = document.getElementById("agenda-result");
+      out.textContent = "Loading agenda…";
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "./api/search?q=multi-meeting-agenda&offset=0");
+      xhr.timeout = 4000;
+      xhr.onload = () => (out.textContent = "Agenda loaded.");
+      xhr.ontimeout = () => (out.textContent = "Agenda took too long to load.");
+      xhr.send();
+    });
+  </script>
+</body>
+</html>

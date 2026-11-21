@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>QA Buddy — Settings</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    body { width: auto; max-width: 520px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    h2 { font-size: 18px; margin: 36px 0 4px; }
+    .intro { color: var(--muted); margin: 0 0 24px; }
+    label { display: block; font-weight: 600; margin: 16px 0 6px; }
+    .hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+    select { width: 100%; padding: 9px 10px; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+    textarea { width: 100%; padding: 9px 10px; font: 13px/1.5 ui-monospace, Consolas, monospace; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin-top: 6px; }
+    textarea:disabled { opacity: .5; }
+    #sites-hint.error { color: var(--bug); }
+    input {
+      width: 100%; padding: 9px 10px; font: inherit; color: var(--ink);
+      background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    }
+    input:focus-visible { outline: 2px solid var(--marker); outline-offset: 1px; }
+    .row { display: flex; gap: 10px; align-items: center; margin-top: 24px; }
+    .btn { text-align: center; }
+    #saved { color: var(--ok); font-size: 13px; }
+    .test-result { font-size: 13px; color: var(--muted); }
+    .assignee { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px 12px; margin: 16px 0 0; }
+    .assignee legend { font-weight: 600; padding: 0 4px; }
+    .choice { display: flex !important; align-items: baseline; gap: 8px; font-weight: 400 !important; margin: 6px 0 !important; }
+    .choice input { width: auto; }
+    .person { margin: 6px 0 0 24px; }
+    .person[hidden] { display: none; }
+    .search-row { display: flex; gap: 8px; }
+    .search-row .btn { flex: none; }
+    .people { list-style: none; padding: 0; margin: 6px 0 0; }
+    .people li button { width: 100%; text-align: left; font: inherit; color: var(--ink); background: var(--surface);
+                        border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; margin-bottom: 4px; cursor: pointer; }
+    .people li button:hover { border-color: var(--ink); }
+    #person-selected { margin: 6px 0 0; }
+    .test-result.ok { color: var(--ok); }
+    .test-result.fail { color: var(--bug); }
+  </style>
+</head>
+<body>
+  <h1>Settings</h1>
+  <h2>Jira</h2>
+  <p class="intro">Used to create issues from bug reports. Saved only in this browser.</p>
+
+  <label for="baseUrl">Jira site</label>
+  <input id="baseUrl" type="url" placeholder="https://your-company.atlassian.net">
+
+  <label for="email">Email <span class="hint">the one you log in to Jira with</span></label>
+  <input id="email" type="email" autocomplete="off">
+
+  <label for="token">API token <span class="hint">from id.atlassian.com, Security, API tokens</span></label>
+  <input id="token" type="password" autocomplete="off">
+
+  <label for="projectKey">Default project key <span class="hint">optional, for example PROJ. Preselected for new issues; you can choose another project for each issue</span></label>
+  <input id="projectKey" type="text">
+
+  <label for="issueType">Default issue type <span class="hint">preselected when the project has it, for example Bug</span></label>
+  <input id="issueType" type="text" placeholder="Bug">
+
+  <fieldset class="assignee">
+    <legend>Default assignee</legend>
+    <p class="hint" style="margin:0 0 4px">Preselected for every issue. You can change it for each issue in the review screen.</p>
+    <label class="choice"><input type="radio" name="assigneeMode" value="default"> Project default <span class="hint">Jira's rule for the project, often the project lead</span></label>
+    <label class="choice"><input type="radio" name="assigneeMode" value="me"> Me</label>
+    <label class="choice"><input type="radio" name="assigneeMode" value="unassigned"> Unassigned <span class="hint">only if the project allows unassigned issues</span></label>
+    <label class="choice"><input type="radio" name="assigneeMode" value="person"> Specific person</label>
+    <div class="person" id="person" hidden>
+      <div class="search-row">
+        <input id="person-query" type="search" placeholder="Search by name or email" aria-label="Search people">
+        <button class="btn" id="person-find">Find</button>
+      </div>
+      <p class="hint" id="person-selected"></p>
+      <ul class="people" id="people"></ul>
+    </div>
+  </fieldset>
+
+  <label for="labels">Labels <span class="hint">added to every issue, separated by commas; leave empty for none</span></label>
+  <input id="labels" type="text" placeholder="qa-buddy">
+
+  <div class="row">
+    <button class="btn" id="test">Test connection</button>
+    <span id="test-result" class="test-result" role="status"></span>
+  </div>
+
+  <h2>Sites to capture</h2>
+  <p class="intro">QA Buddy runs only on these sites; other tabs run none of its code. Applies to pages opened or reloaded after saving.</p>
+  <label class="choice"><input type="radio" name="sitesMode" value="all"> All sites</label>
+  <label class="choice"><input type="radio" name="sitesMode" value="list"> Only these sites</label>
+  <textarea id="sitesList" rows="4" placeholder="*.example.com&#10;localhost" aria-label="Sites, one per line"></textarea>
+  <p class="hint" id="sites-hint">One per line. <code>*.example.com</code> covers example.com and all its subdomains. Ports and paths are ignored.</p>
+
+  <h2>Capture</h2>
+  <label class="choice"><input type="checkbox" id="replayEnabled"> Record session replay (last ~30 seconds, typed values masked)</label>
+  <p class="intro">Applies to pages opened or reloaded after saving.</p>
+
+  <label for="cancelMinSeconds">Report cancelled requests that ran at least
+    <span class="hint">seconds. Use 0 to report every cancelled request.</span></label>
+  <input id="cancelMinSeconds" type="number" min="0" step="0.5" inputmode="decimal">
+
+  <label for="slowSeconds">Mark successful requests as slow after
+    <span class="hint">seconds</span></label>
+  <input id="slowSeconds" type="number" min="1" step="0.5" inputmode="decimal">
+
+  <div class="row">
+    <button class="btn primary" id="save">Save settings</button>
+    <span id="saved" role="status"></span>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

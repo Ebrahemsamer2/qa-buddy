@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Summit 2026 — Registration (QA Buddy demo)</title>
+  <style>
+    body { font: 15px/1.5 system-ui, sans-serif; background: #eef1f4; color: #1f2a37; margin: 0; }
+    .card { max-width: 460px; margin: 40px auto; background: #fff; border-radius: 10px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    h1 { margin: 0 0 4px; font-size: 22px; }
+    p.sub { margin: 0 0 20px; color: #5b6573; }
+    label { display: block; font-weight: 600; margin: 14px 0 4px; }
+    input, select { width: 100%; padding: 9px; font: inherit; border: 1px solid #c9d0d8; border-radius: 6px; box-sizing: border-box; }
+    .check { display: flex; gap: 8px; align-items: center; margin-top: 16px; font-weight: 400; }
+    .check input { width: auto; }
+    button { margin-top: 20px; width: 100%; padding: 11px; font: inherit; font-weight: 600; background: #2b59c3; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+    /* Intentional bug: no wrapping, so very long names break the layout */
+    #result { margin-top: 18px; padding: 12px; border-radius: 6px; white-space: nowrap; display: none; }
+    #result.ok { display: block; background: #e7f6ec; color: #1d6b3a; }
+    #result.fail { display: block; background: #fdecea; color: #a12a20; }
+  </style>
+  <!-- Simulated third-party noise: an analytics script from another site that
+       fails to load. QA Buddy hides it by default as "from other sites". -->
+  <script async src="https://cdn.analytics-tracker.invalid/track.js"></script>
+</head>
+<body>
+  <div class="card">
+    <h1>Summit 2026</h1>
+    <p class="sub">Register for the event. (Demo page for QA Buddy — contains intentional bugs.)</p>
+
+    <form id="signup" novalidate>
+      <label for="fullName">Full name</label>
+      <input id="fullName" name="fullName" type="text">
+
+      <!-- Intentional bug: type="text" so invalid emails are accepted -->
+      <label for="email">Email</label>
+      <input id="email" name="email" type="text">
+
+      <!-- Intentional bug: no min, negative ages are accepted -->
+      <label for="age">Age</label>
+      <input id="age" name="age" type="number">
+
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" type="tel">
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password">
+
+      <label for="country">Country</label>
+      <select id="country" name="country">
+        <option value="">Choose…</option>
+        <option>Egypt</option>
+        <option>United States</option>
+        <option>Germany</option>
+        <option>United Arab Emirates</option>
+      </select>
+
+      <label class="check"><input id="terms" name="terms" type="checkbox"> I agree to the terms</label>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <div id="result" role="status"></div>
+  </div>
+
+  <div class="card">
+    <h1>Preferences</h1>
+    <p class="sub">Intentional bug: saving calls the same broken endpoint three times. The page also has a failing request on load, from before you click anything.</p>
+    <label class="check"><input type="checkbox" id="pref-news"> Email me event news</label>
+    <button type="button" id="save-prefs">Save preferences</button>
+    <div id="prefs-result" role="status" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <h1>Find an attendee</h1>
+    <p class="sub">Intentional bug: the search API is too slow, so the page cancels it after 4 seconds.</p>
+    <label for="q">Name</label>
+    <input id="q" type="search" placeholder="Search by name">
+    <button type="button" id="search">Search</button>
+    <button type="button" id="search-slow" style="background:#5b6573">Search (slow but works)</button>
+    <button type="button" id="search-quick" style="background:#8a94a3">Change filter (cancels after 0.5 s)</button>
+    <div id="search-result" role="status" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <h1>Meeting agenda</h1>
+    <p class="sub">Embedded widget in an iframe, like real apps often use. Its request times out after 4 seconds.</p>
+    <iframe src="frame.html" title="Agenda widget" style="width:100%;height:140px;border:1px solid #c9d0d8;border-radius:6px"></iframe>
+  </div>
+
+  <script>
+    // ----- Noise from before any action: a broken request on page load -----
+    fetch("./api/notifications?since=0").catch(() => {});
+
+    // ----- Preferences: three failing calls to the same endpoint -----
+    document.getElementById("save-prefs").addEventListener("click", async () => {
+      const out = document.getElementById("prefs-result");
+      out.textContent = "Saving…";
+      const results = await Promise.all([0, 1, 2].map((section) =>
+        fetch(`./api/preferences?section=${section}`, { method: "GET" }).then((r) => r.status)));
+      out.textContent = results.every((s) => s === 200) ? "Saved." : "Couldn't save your preferences.";
+    });
+
+    // ----- Slow search -----
+    const searchResult = document.getElementById("search-result");
+    async function search(slowButWorks) {
+      const q = document.getElementById("q").value || "sara";
+      searchResult.textContent = "Searching…";
+      const controller = new AbortController();
+      const timer = slowButWorks ? null : setTimeout(() => controller.abort(), 4000); // give up after 4 s
+      try {
+        const res = await fetch(`./api/search?q=${encodeURIComponent(q)}${slowButWorks ? "&fast=1" : ""}`, { signal: controller.signal });
+        const data = await res.json();
+        searchResult.textContent = `Found ${data.results.length} attendees.`;
+      } catch (err) {
+        searchResult.textContent = "Search took too long. Please try again.";
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+    // Mimics a page that cancels the previous request when a filter changes
+    document.getElementById("search-quick").addEventListener("click", () => {
+      const controller = new AbortController();
+      fetch("./api/search?q=agenda&offset=0", { signal: controller.signal }).catch(() => {});
+      setTimeout(() => controller.abort(), 500);
+      searchResult.textContent = "Filter changed, previous request cancelled.";
+    });
+    document.getElementById("search").addEventListener("click", () => search(false));
+    document.getElementById("search-slow").addEventListener("click", () => search(true));
+
+    const form = document.getElementById("signup");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      result.className = "";
+
+      try {
+        // Intentional bug: names with non-Latin characters or emoji go through a
+        // "name check" endpoint that doesn't exist (404), and then the code reads
+        // a property of undefined (TypeError).
+        if (/[^\u0000-\u024F\s'-]/.test(data.fullName)) {
+          const check = await fetch("./api/validate-name?name=" + encodeURIComponent(data.fullName));
+          const info = check.ok ? await check.json() : undefined;
+          console.error("Name validation failed with status", check.status);
+          data.displayName = info.normalized.trim(); // throws TypeError
+        }
+
+        const res = await fetch("./api/register.json?email=" + encodeURIComponent(data.email));
+        if (!res.ok) throw new Error("Registration failed: " + res.status);
+
+        result.textContent = "Welcome, " + (data.displayName || data.fullName) + "! You're registered for Summit 2026.";
+        result.className = "ok";
+      } catch (err) {
+        result.textContent = "Something went wrong. Please try again.";
+        result.className = "fail";
+        throw err; // surfaces as an unhandled promise rejection for QA Buddy to catch
+      }
+    });
+  </script>
+</body>
+</html>

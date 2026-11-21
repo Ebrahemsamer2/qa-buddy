@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>QA Buddy</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="brand-mark" aria-hidden="true">🐞</span>QA Buddy</div>
+    <div id="status" class="status">Checking page…</div>
+  </header>
+
+  <div class="intro-tip" id="intro-tip" hidden role="note">
+    <button class="close" id="intro-close" aria-label="Dismiss tip">×</button>
+    <strong>QA Buddy is recording in the background</strong>
+    <p>Errors, failed requests, your steps and a short replay are captured as you use the page. When something breaks, open Report a bug and create the Jira issue. Add your Jira details in Settings first.</p>
+  </div>
+
+
+  <main>
+
+    <section class="panel" id="panel-bug">
+      <figure class="shot">
+        <img id="shot-img" alt="Screenshot of the current page">
+        <figcaption>
+          <span id="shot-status">Taking screenshot…</span>
+          <span class="shot-actions">
+            <button class="link" id="btn-edit-shot">Edit</button>
+            <button class="link" id="btn-retake">Retake</button>
+          </span>
+        </figcaption>
+      </figure>
+
+      <div class="counts">
+        <div class="count"><strong id="count-errors">0</strong><span>Errors</span></div>
+        <div class="count"><strong id="count-network">0</strong><span>Request problems</span></div>
+      </div>
+
+      <div class="list-head">
+        <span id="recording">Recording</span>
+        <button class="link" id="btn-fresh" title="Clear the list and record only what happens from now on">Start fresh</button>
+      </div>
+      <div class="scope" id="scope" hidden>
+        <p class="last-action" id="last-action"></p>
+        <div class="scope-buttons" role="group" aria-label="Which events to include">
+          <button class="chip" data-scope="lastAction" id="scope-last">Since last action</button>
+          <button class="chip" data-scope="all">All</button>
+          <button class="chip" data-scope="none">None</button>
+        </div>
+      </div>
+      <ol class="events" id="events"></ol>
+      <p class="empty" id="events-empty">Nothing captured yet. Use the page, and errors and failed requests appear here.</p>
+      <p class="hidden-note" id="hidden-note" hidden>
+        <span id="hidden-text"></span>
+        <button class="link" id="btn-third-party"></button>
+      </p>
+
+      <details class="steps-box" id="steps-box" hidden>
+        <summary><span id="steps-title">Steps to reproduce</span></summary>
+        <ol class="steps-list" id="steps-list"></ol>
+        <button class="link" id="btn-clear-steps">Clear steps</button>
+      </details>
+
+      <p class="replay-box" id="replay-box">
+        <span id="replay-text">Session replay: checking…</span>
+        <button class="link" id="btn-replay" hidden>Download replay</button>
+      </p>
+
+      <details class="env">
+        <summary>Environment</summary>
+        <dl id="env"></dl>
+      </details>
+
+
+      <div class="fields">
+        <label for="report-title">Title</label>
+        <input id="report-title" type="text" autocomplete="off">
+        <label for="report-desc">What happened <span class="hint">optional</span></label>
+        <textarea id="report-desc" rows="3" placeholder="What you did, what you expected, what happened instead"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="btn-download">Download report<small>HTML file with screenshot and all details</small></button>
+        <div class="row-actions">
+          <button class="btn" id="btn-copy">Copy as text</button>
+          <button class="btn" id="btn-jira">Create Jira issue</button>
+        </div>
+      </div>
+      <p class="feedback" id="feedback" role="status"></p>
+      <div class="issue" id="issue" hidden>
+        <span id="issue-text"></span>
+        <button class="link" id="issue-open">Open in Jira</button>
+      </div>
+    </section>
+    <section class="review" id="review" hidden aria-labelledby="review-title">
+      <div class="review-head">
+        <button class="link" id="review-back">Back</button>
+        <h2 id="review-title">Review before sending</h2>
+      </div>
+      <div class="dest" role="radiogroup" aria-label="Where to send the report">
+        <label class="opt"><input type="radio" name="dest" value="new" checked> Create a new issue</label>
+        <label class="opt"><input type="radio" name="dest" value="existing"> Add to an existing issue</label>
+      </div>
+      <p class="review-dest" id="review-dest"></p>
+
+      <div class="existing" id="existing-box" hidden>
+        <label class="review-label" for="issue-key">Issue key or link</label>
+        <div class="search-row">
+          <input id="issue-key" type="text" list="recent-issues" autocomplete="off" placeholder="PROJ-123 or https://…/browse/PROJ-123">
+          <button class="btn" id="issue-check">Check</button>
+        </div>
+        <datalist id="recent-issues"></datalist>
+        <p class="empty-note" id="issue-info"></p>
+      </div>
+
+      <div class="project-box" id="project-box">
+        <div class="pair">
+          <div>
+            <label class="review-label" for="review-project">Project</label>
+            <select id="review-project"><option value="">Loading projects…</option></select>
+          </div>
+          <div>
+            <label class="review-label" for="review-type">Issue type</label>
+            <select id="review-type"></select>
+          </div>
+        </div>
+      </div>
+
+      <label class="review-label" for="review-summary" id="summary-label">Summary</label>
+      <input id="review-summary" type="text" autocomplete="off">
+
+      <div id="assignee-box">
+      <label class="review-label" for="review-assignee">Assignee</label>
+      <select id="review-assignee"></select>
+      <div class="person-search" id="review-person" hidden>
+        <div class="search-row">
+          <input id="review-person-query" type="search" placeholder="Search by name or email" aria-label="Search people">
+          <button class="btn" id="review-person-find">Find</button>
+        </div>
+        <p class="empty-note" id="review-person-note"></p>
+        <ul class="people" id="review-people"></ul>
+      </div>
+      </div>
+
+      <h3>Main problem</h3>
+      <div id="review-main"></div>
+
+      <h3 id="review-related-h">Also included</h3>
+      <ol class="review-items" id="review-items"></ol>
+
+      <h3>Attachments and extras</h3>
+      <label class="opt"><input type="checkbox" id="opt-shot" checked> Screenshot</label>
+      <label class="opt"><input type="checkbox" id="opt-html" checked> Full HTML report</label>
+      <label class="opt" id="opt-replay-row"><input type="checkbox" id="opt-replay" checked> <span id="opt-replay-text">Session replay</span></label>
+      <label class="opt" id="opt-steps-row"><input type="checkbox" id="opt-steps" checked> <span id="opt-steps-text">Recorded steps</span></label>
+
+      <button class="btn primary review-send" id="review-send">Create Jira issue<small id="review-send-hint"></small></button>
+      <p class="feedback" id="review-feedback" role="status"></p>
+    </section>
+  </main>
+
+  <footer>
+    <button class="link" id="open-settings">Settings</button>
+  </footer>
+
+  <script src="report.js"></script>
+  <script src="replay.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

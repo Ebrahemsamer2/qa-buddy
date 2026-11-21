@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>QA Buddy — Edit screenshot</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    body { width: auto; min-height: 100vh; display: flex; flex-direction: column; }
+    .bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 16px;
+           border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 2; }
+    .bar .brand { margin-right: 12px; }
+    .tools { display: flex; gap: 4px; }
+    .tool { font: inherit; font-weight: 600; font-size: 13px; padding: 7px 12px; border-radius: 8px; cursor: pointer;
+            border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+    .tool[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .tool:disabled { opacity: .45; cursor: not-allowed; }
+    .spacer { flex: 1; }
+    .bar .btn { padding: 7px 14px; font-size: 13px; text-align: center; }
+    .hint { color: var(--muted); font-size: 13px; padding: 8px 16px 0; margin: 0; }
+    .stage { flex: 1; padding: 12px 16px 24px; overflow: auto; }
+    canvas { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px;
+             cursor: crosshair; touch-action: none; background: var(--surface); }
+    .tool:focus-visible, .btn:focus-visible { outline: 2px solid var(--marker); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">🐞</span>Edit screenshot</div>
+    <div class="tools" role="group" aria-label="Drawing tool">
+      <button class="tool" data-tool="box" aria-pressed="true">Box</button>
+      <button class="tool" data-tool="arrow" aria-pressed="false">Arrow</button>
+      <button class="tool" data-tool="blur" aria-pressed="false">Blur</button>
+    </div>
+    <button class="tool" id="undo" disabled>Undo</button>
+    <span class="spacer"></span>
+    <button class="btn" id="cancel">Cancel</button>
+    <button class="btn primary" id="done">Save screenshot</button>
+  </div>
+  <p class="hint" id="hint">Drag on the screenshot. Box and Arrow point at the problem; Blur hides names, emails and other private details. Ctrl+Z undoes.</p>
+  <div class="stage"><canvas id="canvas" aria-label="Screenshot being edited"></canvas></div>
+  <script src="editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QA Buddy: capture bugs, report them to Jira</title>
+<meta name="description" content="A Chrome extension that captures console errors, failed requests, steps, a session replay and a screenshot, and reports them to Jira in a few clicks.">
+<link rel="icon" href="extension/icons/icon32.png">
+<style>
+  :root { --paper:#f6f8f7; --surface:#fff; --ink:#16302b; --muted:#5b6e69; --line:#d5dedb; --marker:#f4c542; --deep:#16302b; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root { --paper:#13201d; --surface:#1a2a26; --ink:#e6eeeb; --muted:#93a6a0; --line:#2a3b37; color-scheme: dark; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 "Segoe UI Variable Text", "SF Pro Text", system-ui, sans-serif; }
+  .hero { background: var(--deep); color: #fff; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  .hero .wrap { padding-top: 56px; padding-bottom: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .brand img { width: 56px; height: 56px; }
+  .brand span { font-size: 28px; font-weight: 700; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.12; margin: 0 0 16px; letter-spacing: -.5px; }
+  .hero p { color: #c9d6d2; margin: 0 0 26px; font-size: 19px; }
+  .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 11px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; }
+  .btn.primary { background: var(--marker); color: #16302b; }
+  .btn.ghost { border: 1px solid #4c6a63; color: #fff; }
+  .btn.soon { opacity: .7; cursor: default; }
+  .shot { width: 100%; border-radius: 12px; box-shadow: 0 18px 44px rgba(0,0,0,.4); display: block; }
+  section { padding: 56px 0 8px; }
+  h2 { font-size: 24px; margin: 0 0 22px; padding-bottom: 4px; border-bottom: 3px solid var(--marker); display: inline-block; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .card h3 { font-size: 17px; margin: 0 0 6px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .gallery img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+  ol { padding-left: 22px; margin: 0; }
+  li { margin: 6px 0; }
+  footer { padding: 48px 0 40px; color: var(--muted); font-size: 14px; }
+  footer a, section a { color: inherit; }
+  a:focus-visible { outline: 3px solid var(--marker); outline-offset: 3px; }
+  @media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; padding-top: 40px; padding-bottom: 40px; } }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <div class="brand"><img src="extension/icons/icon128.png" alt=""><span>QA Buddy</span></div>
+        <h1>Capture bugs. Report them to Jira in a few clicks.</h1>
+        <p>Console errors, failed requests, steps to reproduce, a session replay and a screenshot, recorded quietly in the background and turned into a complete ticket.</p>
+        <div class="buttons">
+          <span class="btn primary soon" aria-disabled="true">Chrome Web Store: coming soon</span>
+          <a class="btn ghost" href="https://github.com/ebrahemsamer2/qa-buddy">View on GitHub</a>
+        </div>
+      </div>
+      <img class="shot" src="store/screenshots/1-capture.png" alt="QA Buddy showing captured errors, the last action and steps to reproduce">
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>What it does</h2>
+      <div class="grid">
+        <div class="card"><h3>Captures what matters</h3><p>Console errors with stack traces, failed, slow and cancelled requests, including inside iframes.</p></div>
+        <div class="card"><h3>Writes the steps for you</h3><p>Pages, clicks, selections and the fields you typed in. Never what you typed.</p></div>
+        <div class="card"><h3>Replays the moment</h3><p>A short session replay of what happened before the bug, with typed values masked.</p></div>
+        <div class="card"><h3>Focuses on the bug</h3><p>Only what happened after your last action, repeated calls grouped, noise from other sites hidden.</p></div>
+        <div class="card"><h3>Sends to Jira</h3><p>New issue or an existing ticket, with project, type and assignee. You review everything first.</p></div>
+        <div class="card"><h3>Private by design</h3><p>Data stays in your browser until you send it to your own Jira. No analytics, no servers.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>See it</h2>
+      <div class="gallery">
+        <img src="store/screenshots/2-review.png" alt="Review screen before sending to Jira">
+        <img src="store/screenshots/3-replay.png" alt="Session replay of the moments before the bug">
+        <img src="store/screenshots/4-privacy.png" alt="Screenshot editor blurring private details">
+      </div>
+    </section>
+
+    <section>
+      <h2>Get started</h2>
+      <ol>
+        <li>Install QA Buddy and pin the 🐞 icon.</li>
+        <li>Create a Jira API token at id.atlassian.com → Security.</li>
+        <li>Open QA Buddy → Settings: your Jira site, email and token → Test connection → Save.</li>
+        <li>When something breaks, click 🐞, review, and create the issue.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <a href="privacy-policy.html">Privacy policy</a> · <a href="https://github.com/ebrahemsamer2/qa-buddy">GitHub</a> · <a href="https://github.com/ebrahemsamer2/qa-buddy/issues">Report an issue</a> · MIT License · © 2026 Ebrahim Samir
+  </footer>
+</body>
+</html>
