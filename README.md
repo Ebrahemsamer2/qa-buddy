@@ -34,7 +34,7 @@ QA Buddy is a Chrome extension that records what developers need to fix a bug, q
 
 ## Install
 
-- **Chrome Web Store:** _link coming after review_
+- **Chrome Web Store:** [Add QA Buddy to Chrome](https://chromewebstore.google.com/detail/qa-buddy/lhmdoibblkanbbcegbkhaabhdomgdhfp)
 - **From source:** download this repository, open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and select the `extension` folder.
 
 ## Set up Jira
