@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QA Buddy: capture bugs, report them to Jira</title>
-<meta name="description" content="A Chrome extension that captures console errors, failed requests, steps, a session replay and a screenshot, and reports them to Jira in a few clicks.">
+<meta name="description" content="A Chrome extension that captures console errors, failed requests, steps and a screenshot, and reports them to Jira in a few clicks.">
 <link rel="icon" href="extension/icons/icon32.png">
 <style>
   :root { --paper:#f6f8f7; --surface:#fff; --ink:#16302b; --muted:#5b6e69; --line:#d5dedb; --marker:#f4c542; --deep:#16302b; color-scheme: light; }
@@ -31,7 +31,7 @@
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
   .card h3 { font-size: 17px; margin: 0 0 6px; }
   .card p { margin: 0; color: var(--muted); font-size: 15px; }
-  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
   .gallery img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
   ol { padding-left: 22px; margin: 0; }
   li { margin: 6px 0; }
@@ -47,9 +47,9 @@
       <div>
         <div class="brand"><img src="extension/icons/icon128.png" alt=""><span>QA Buddy</span></div>
         <h1>Capture bugs. Report them to Jira in a few clicks.</h1>
-        <p>Console errors, failed requests, steps to reproduce, a session replay and a screenshot, recorded quietly in the background and turned into a complete ticket.</p>
+        <p>Console errors, failed requests, steps to reproduce and a screenshot, recorded quietly in the background and turned into a complete ticket.</p>
         <div class="buttons">
-          <span class="btn primary soon" aria-disabled="true">Chrome Web Store: coming soon</span>
+          <a class="btn primary" href="https://chromewebstore.google.com/detail/qa-buddy/lhmdoibblkanbbcegbkhaabhdomgdhfp">Add to Chrome</a>
           <a class="btn ghost" href="https://github.com/ebrahemsamer2/qa-buddy">View on GitHub</a>
         </div>
       </div>
@@ -63,7 +63,7 @@
       <div class="grid">
         <div class="card"><h3>Captures what matters</h3><p>Console errors with stack traces, failed, slow and cancelled requests, including inside iframes.</p></div>
         <div class="card"><h3>Writes the steps for you</h3><p>Pages, clicks, selections and the fields you typed in. Never what you typed.</p></div>
-        <div class="card"><h3>Replays the moment</h3><p>A short session replay of what happened before the bug, with typed values masked.</p></div>
+        <div class="card"><h3>Shows what you saw</h3><p>A screenshot you can annotate with boxes and arrows, and blur to hide private details.</p></div>
         <div class="card"><h3>Focuses on the bug</h3><p>Only what happened after your last action, repeated calls grouped, noise from other sites hidden.</p></div>
         <div class="card"><h3>Sends to Jira</h3><p>New issue or an existing ticket, with project, type and assignee. You review everything first.</p></div>
         <div class="card"><h3>Private by design</h3><p>Data stays in your browser until you send it to your own Jira. No analytics, no servers.</p></div>
@@ -74,15 +74,14 @@
       <h2>See it</h2>
       <div class="gallery">
         <img src="store/screenshots/2-review.png" alt="Review screen before sending to Jira">
-        <img src="store/screenshots/3-replay.png" alt="Session replay of the moments before the bug">
-        <img src="store/screenshots/4-privacy.png" alt="Screenshot editor blurring private details">
+        <img src="store/screenshots/3-privacy.png" alt="Screenshot editor blurring private details">
       </div>
     </section>
 
     <section>
       <h2>Get started</h2>
       <ol>
-        <li>Install QA Buddy and pin the 🐞 icon.</li>
+        <li><a href="https://chromewebstore.google.com/detail/qa-buddy/lhmdoibblkanbbcegbkhaabhdomgdhfp">Install QA Buddy</a> from the Chrome Web Store and pin the 🐞 icon.</li>
         <li>Create a Jira API token at id.atlassian.com → Security.</li>
         <li>Open QA Buddy → Settings: your Jira site, email and token → Test connection → Save.</li>
         <li>When something breaks, click 🐞, review, and create the issue.</li>
