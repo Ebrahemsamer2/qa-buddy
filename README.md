@@ -1,6 +1,6 @@
 # 🐞 QA Buddy
 
-**Capture bugs with console errors, failed requests, steps, a session replay and a screenshot, and report them to Jira in a few clicks.**
+**Capture bugs with console errors, failed requests, steps and a screenshot, and report them to Jira in a few clicks.**
 
 QA Buddy is a Chrome extension that records what developers need to fix a bug, quietly in the background, and turns it into a complete Jira ticket.
 
@@ -12,7 +12,6 @@ QA Buddy is a Chrome extension that records what developers need to fix a bug, q
 - Console errors, uncaught errors and failed promises, with file, line and stack trace
 - Request problems: failed, cancelled and slow `fetch`/XHR calls and failed page resources, including inside iframes
 - Steps to reproduce: pages, clicks, selections and the fields you typed in (**never what you typed**)
-- Session replay of the last ~30 seconds (rrweb, typed values masked)
 - Screenshot with box, arrow and blur tools
 - Environment: browser, OS, screen, window, language, time zone
 
@@ -23,8 +22,8 @@ QA Buddy is a Chrome extension that records what developers need to fix a bug, q
 - Star the **main problem** so developers know where to start
 
 **Report**
-- **Jira**: create a new issue (project, issue type, assignee) or add the report to an existing one, after reviewing exactly what will be sent; screenshot, HTML report and replay are attached
-- **Download** a self-contained HTML report or replay, or **copy** the report as text
+- **Jira**: create a new issue (project, issue type, assignee) or add the report to an existing one, after reviewing exactly what will be sent; the screenshot and HTML report are attached
+- **Download** a self-contained HTML report, or **copy** the report as text
 
 **Private by design**
 - Data stays in the browser until you send it to your own Jira
@@ -74,7 +73,7 @@ Creates `dist/qa-buddy-<version>.zip` with `manifest.json` at the top level. Lis
 
 | Permission | Why |
 |---|---|
-| `scripting` | Registers capture scripts on the sites you allow; reads page details and the replay when you open QA Buddy |
+| `scripting` | Registers capture scripts on the sites you allow; reads page details when you open QA Buddy |
 | `storage` | Settings (local) and captured data for the current tab (session) |
 | `webRequest` | Detects failed page resources; requests are observed, never blocked or modified |
 | `<all_urls>` | Capture on whichever site you test, take screenshots, and reach your own Jira site |
@@ -82,5 +81,3 @@ Creates `dist/qa-buddy-<version>.zip` with `manifest.json` at the top level. Lis
 ## License
 
 [MIT](LICENSE) © 2026 Ebrahim Samir
-
-Includes [rrweb](https://github.com/rrweb-io/rrweb) and rrweb-player 2.1.7 (MIT). See [extension/vendor/LICENSES.md](extension/vendor/LICENSES.md).
